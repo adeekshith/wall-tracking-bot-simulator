@@ -209,15 +209,23 @@ while True:
     if aroundBot[3]==1:
         if aroundBot[2]==0:
             mybot.go(4)
+        else:
+            mybot.go(1)
     elif aroundBot[2]==1:
         if aroundBot[1]==0:
             mybot.go(1)
+        else:
+            mybot.go(3)
     elif aroundBot[4]==1:
         if aroundBot[3]==0:
             mybot.go(2)
+        else:
+            mybot.go(4)
     elif aroundBot[1]==1:
         if aroundBot[4]==0:
             mybot.go(3)
+        else:
+            mybot.go(2)
     elif prevAroundBot[3]==1:
         if prevAroundBot[2]==0:
             mybot.go(2)
