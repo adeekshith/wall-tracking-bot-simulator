@@ -1,4 +1,4 @@
-# dotbot0.py
+# dotbot1.py
 
 # by Kerstin Voigt, Sept 2014; inspired by Nils Nilsson, Introduction to
 # Artificial Intelligence: A New Synthesis
@@ -14,7 +14,7 @@ GRID = 20
 WALL = {}
 
 # brick by brick wall
-wallAt=[]
+
 class Wall:
     def __init__(self):
         global WALL
@@ -37,9 +37,6 @@ class Wall:
                                                       click1y + GRID))
             WALL[(click1x,click1y)].setFill("black")
             WALL[(click1x,click1y)].draw(win)
-            
-            print "Wall at %d,%d" % (click1x, click1y)
-            wallAt.append([click1x, click1y])
 
             click = win.getMouse()
             click2x = click.x - click.x % GRID
@@ -51,7 +48,6 @@ class Wall:
             click1x = click2x
             click1y = click2y
 
-
     def draw(self):
         for loc in WALL.keys():
             WALL[loc].draw(win)
@@ -61,10 +57,10 @@ class Wall:
             WALL[loc].undraw()
             
 
-initialBotLocation=[5*GRID,5*GRID]
+
 # the dotbot robot ...   
 class DotBot:
-    def __init__(self,loc = Point(initialBotLocation[0],initialBotLocation[1]), col="blue", pwr = 100):
+    def __init__(self,loc = Point(5*GRID,5*GRID), col="red", pwr = 100):
         self.location = loc
         self.color = col
         self.the_dotbot = Oval(self.location,\
@@ -122,59 +118,15 @@ class DotBot:
         if self.location.x <= WORLD_MAX_X - GRID:
             self.location = newloc
 
-    def botLocation(self):
-        return [self.location.x,self.location.y]
-
-    def botNeighborhood(self):
-        botSurrounding=[0,0,0,0,0] # self, top, right, bottom, left
-
-        try:
-            botSurrounding[0]=wallAt.index([self.location.x,self.location.y])
-            print "Bot is on the wall"
-            botSurrounding[0]=1
-        except ValueError:
-            botSurrounding[0]=0
-
-        # Checking wall upwards
-        if self.location.y >= GRID:
-            newloc = Point(self.location.x, self.location.y - GRID)
-            try:
-                botSurrounding[1]=wallAt.index([newloc.x,newloc.y])
-                print "Bot is on the wall"
-                botSurrounding[1]=1
-            except ValueError:
-                botSurrounding[1]=0
-
-        # Checking wall right
-        if self.location.x <= WORLD_MAX_X - GRID:
-            newloc = Point(self.location.x + GRID, self.location.y)
-            try:
-                botSurrounding[2]=wallAt.index([newloc.x,newloc.y])
-                print "Wall to the right"
-                botSurrounding[2]=1
-            except ValueError:
-                botSurrounding[2]=0
-
-        # Checking wall down
-        if self.location.y <= WORLD_MAX_Y - GRID:
-            newloc = Point(self.location.x, self.location.y + GRID)
-            try:
-                botSurrounding[3]=wallAt.index([newloc.x,newloc.y])
-                print "Wall at the bottom"
-                botSurrounding[3]=1
-            except ValueError:
-                botSurrounding[3]=0
-
-        # Checking wall left
-        if self.location.x >= GRID:
-            newloc = Point(self.location.x - GRID, self.location.y)        
-            try:
-                botSurrounding[4]=wallAt.index([newloc.x,newloc.y])
-                print "Wall on the left"
-                botSurrounding[4]=1
-            except ValueError:
-                botSurrounding[4]=0
-        return botSurrounding
+    def next2wall(self):
+        above = (self.location.x, self.location.y - GRID)
+        below = (self.location.x, self.location.y + GRID)
+        toleft = (self.location.x - GRID, self.location.y)
+        toright = (self.location.x + GRID, self.location.y)
+        return WALL.has_key(above) or WALL.has_key(below) or\
+               WALL.has_key(toleft) or WALL.has_key(toright)
+    
+        
 
 # this could be a main function but doesn't have to be ...
 # these lines will be executed as part of loading this file ...
@@ -204,40 +156,13 @@ print "click at %d,%d" % (clickx1, clicky1)
 start.undraw()
 
 while True:
-    #mybot.go(random.randint(1,4))
-    aroundBot=mybot.botNeighborhood()
-    if aroundBot[3]==1:
-        if aroundBot[2]==0:
-            mybot.go(4)
-    elif aroundBot[2]==1:
-        if aroundBot[1]==0:
-            mybot.go(1)
-    elif aroundBot[4]==1:
-        if aroundBot[3]==0:
-            mybot.go(2)
-    elif aroundBot[1]==1:
-        if aroundBot[4]==0:
-            mybot.go(3)
-    elif prevAroundBot[3]==1:
-        if prevAroundBot[2]==0:
-            mybot.go(2)
-    elif prevAroundBot[2]==1:
-        if prevAroundBot[1]==0:
-            mybot.go(4)
-    elif prevAroundBot[4]==1:
-        if prevAroundBot[3]==0:
-            mybot.go(3)
-    elif prevAroundBot[1]==1:
-        if prevAroundBot[4]==0:
-            mybot.go(1)
-    else:
-        mybot.go(random.randint(1,4))
-        print "No Wall around"
+    mybot.go(random.randint(1,4))
+
+    # for debugging only; do not break but start circling ... 
+    if mybot.next2wall():
+        Text(click, "HITTING THE WALL!!").draw(win)
+        break
     
-    print "bot is at: "+str(mybot.botLocation())
-
-    #mybot.go(1)
-
     click = win.getMouse()
     clickx2 = click.x - click.x % GRID
     clicky2 = click.y - click.y % GRID
@@ -254,7 +179,6 @@ while True:
 
     clickx1 = clickx2
     clicky1 = clicky2
-    prevAroundBot=aroundBot
 
 win.getMouse()
 win.getMouse()
