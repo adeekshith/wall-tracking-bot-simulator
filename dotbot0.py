@@ -1,8 +1,8 @@
 # dotbot0.py
 
-# by Kerstin Voigt, Sept 2014; inspired by Nils Nilsson, Introduction to
+# By Deekshith Allamaneni, Oct 2014. Forked form Kerstin Voigt, Sept 2014; 
+# inspired by Nils Nilsson, Introduction to
 # Artificial Intelligence: A New Synthesis
-
 
 from graphics import *
 import random
