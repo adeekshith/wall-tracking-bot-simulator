@@ -202,7 +202,9 @@ clicky1 = click.y - click.y % GRID
 print "click at %d,%d" % (clickx1, clicky1)
 
 start.undraw()
-
+previous_move=0
+botPreviousLocation=[-1,-1]
+prevAroundBot=[-1,-1,-1,-1,-1]
 while True:
     #mybot.go(random.randint(1,4))
     aroundBot=mybot.botNeighborhood()
@@ -247,8 +249,31 @@ while True:
         else:
             mybot.go(3)
     else:
-        mybot.go(random.randint(1,4))
-        print "No Wall around"
+        botLocationNow=mybot.botLocation()
+        if previous_move==0:
+            if botLocationNow!=botPreviousLocation:
+                mybot.go(3)
+            else:
+                previous_move=1
+                mybot.go(previous_move)
+        elif previous_move==1 or previous_move==5:
+            if botLocationNow!=botPreviousLocation:
+                mybot.go(1)
+            else:
+                previous_move=4
+                mybot.go(previous_move)
+        elif previous_move==4:
+            previous_move=2
+            mybot.go(previous_move)
+        elif previous_move==2:
+            if botLocationNow!=botPreviousLocation:
+                mybot.go(previous_move)
+            else:
+                previous_move=5
+                mybot.go(4)
+
+        botPreviousLocation=botLocationNow
+        print "Searching for wall!! O_O"
     
     print "bot is at: "+str(mybot.botLocation())
 
@@ -275,8 +300,3 @@ while True:
 win.getMouse()
 win.getMouse()
 win.close()
-    
-    
-
-    
-            
