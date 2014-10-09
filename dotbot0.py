@@ -206,38 +206,46 @@ start.undraw()
 while True:
     #mybot.go(random.randint(1,4))
     aroundBot=mybot.botNeighborhood()
-    if aroundBot[3]==1:
-        if aroundBot[2]==0:
+    if aroundBot[3]==1:             # Wall at bottom
+        if aroundBot[2]==0:             # Continue Right
             mybot.go(4)
+        else:                           
+            mybot.go(1)                 # Right to top
+    elif aroundBot[2]==1:           # Wall towards right
+        if aroundBot[1]==0:             
+            mybot.go(1)                 # Continue Top
         else:
-            mybot.go(1)
-    elif aroundBot[2]==1:
-        if aroundBot[1]==0:
-            mybot.go(1)
-        else:
-            mybot.go(3)
-    elif aroundBot[4]==1:
+            mybot.go(3)                 # Top to left
+    elif aroundBot[4]==1:           # Wall towards left
         if aroundBot[3]==0:
-            mybot.go(2)
+            mybot.go(2)                 # Continue bottom
         else:
-            mybot.go(4)
+            mybot.go(4)                 # Bottom to right
     elif aroundBot[1]==1:
-        if aroundBot[4]==0:
-            mybot.go(3)
+        if aroundBot[4]==0:         # Wall at top
+            mybot.go(3)                 # Continue left
         else:
-            mybot.go(2)
+            mybot.go(2)                 # Left to bottom
     elif prevAroundBot[3]==1:
         if prevAroundBot[2]==0:
-            mybot.go(2)
+            mybot.go(2)                 # Right to bottom
+        else:
+            mybot.go(4)
     elif prevAroundBot[2]==1:
         if prevAroundBot[1]==0:
-            mybot.go(4)
+            mybot.go(4)                 # Top to Right
+        else:
+            mybot.go(1)
     elif prevAroundBot[4]==1:
         if prevAroundBot[3]==0:
-            mybot.go(3)
+            mybot.go(3)                 # Bottom to left
+        else:
+            mybot.go(2)
     elif prevAroundBot[1]==1:
         if prevAroundBot[4]==0:
-            mybot.go(1)
+            mybot.go(1)                 # Left to top
+        else:
+            mybot.go(3)
     else:
         mybot.go(random.randint(1,4))
         print "No Wall around"
