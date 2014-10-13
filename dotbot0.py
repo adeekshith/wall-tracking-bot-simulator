@@ -4,6 +4,10 @@
 # inspired by Nils Nilsson, Introduction to
 # Artificial Intelligence: A New Synthesis
 
+# Planned future implementation:
+# It should find the wall and trace with AI
+#   without any need for several conditions.
+
 from graphics import *
 import random
 
@@ -209,8 +213,8 @@ while True:
     #mybot.go(random.randint(1,4))
     aroundBot=mybot.botNeighborhood()
     if aroundBot[3]==1:             # Wall at bottom
-        if aroundBot[2]==0:             # Continue Right
-            mybot.go(4)
+        if aroundBot[2]==0:             
+            mybot.go(4)                 # Continue Right
         else:                           
             mybot.go(1)                 # Right to top
     elif aroundBot[2]==1:           # Wall towards right
